@@ -4,10 +4,12 @@ import CameraCapture from './CameraCapture';
 
 interface InputCardProps {
     onIdentify: (imageSrc?: string) => void;
+    activeTab: 'upload' | 'camera' | 'dialogue';
+    onTabChange: (tab: 'upload' | 'camera' | 'dialogue') => void;
 }
 
-const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
-    const [activeTab, setActiveTab] = useState<'upload' | 'camera' | 'dialogue'>('upload');
+const InputCard: React.FC<InputCardProps> = ({ onIdentify, activeTab, onTabChange }) => {
+    // Local state removed in favor of props
     const [isDragOver, setIsDragOver] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,7 +48,7 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
             <div className="bg-black/80 backdrop-blur-xl rounded-xl p-6 md:p-8 border border-white/5">
                 <div className="flex items-center gap-4 mb-8 border-b border-white/10 pb-4">
                     <button
-                        onClick={() => setActiveTab('upload')}
+                        onClick={() => onTabChange('upload')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'upload'
                             ? 'text-primary border-b-2 border-primary'
                             : 'text-gray-400 hover:text-white'
@@ -57,7 +59,7 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                     </button>
 
                     <button
-                        onClick={() => setActiveTab('camera')}
+                        onClick={() => onTabChange('camera')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'camera'
                             ? 'text-secondary border-b-2 border-secondary'
                             : 'text-gray-400 hover:text-white'
@@ -68,7 +70,7 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                     </button>
 
                     <button
-                        onClick={() => setActiveTab('dialogue')}
+                        onClick={() => onTabChange('dialogue')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'dialogue'
                             ? 'text-accent border-b-2 border-accent'
                             : 'text-gray-400 hover:text-white'

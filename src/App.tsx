@@ -11,6 +11,12 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isModalScrolled, setIsModalScrolled] = useState(false);
+  const [activeInputTab, setActiveInputTab] = useState<'upload' | 'camera' | 'dialogue'>('upload');
+
+  const handleTabSelect = (tab: 'upload' | 'camera' | 'dialogue') => {
+    setActiveInputTab(tab);
+    document.getElementById('identify-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const handleIdentify = () => {
     setIsAnalyzing(true);
@@ -57,10 +63,14 @@ function App() {
       <Navbar forceScrolled={isModalScrolled} />
 
       <main className="relative z-10">
-        <Hero onStart={() => document.getElementById('identify-section')?.scrollIntoView({ behavior: 'smooth' })} />
+        <Hero onSelectTab={handleTabSelect} />
 
         <div id="identify-section" className="container mx-auto px-6 relative z-20">
-          <InputCard onIdentify={handleIdentify} />
+          <InputCard
+            onIdentify={handleIdentify}
+            activeTab={activeInputTab}
+            onTabChange={setActiveInputTab}
+          />
         </div>
 
         {/* Analyzing Loader Overlay */}

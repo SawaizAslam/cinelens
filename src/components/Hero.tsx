@@ -2,10 +2,10 @@ import React from 'react';
 import { Camera, Image as ImageIcon, MessageSquare, ArrowRight } from 'lucide-react';
 
 interface HeroProps {
-    onStart: () => void;
+    onSelectTab: (tab: 'upload' | 'camera' | 'dialogue') => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onStart }) => {
+const Hero: React.FC<HeroProps> = ({ onSelectTab }) => {
     return (
         <div className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
             {/* Background Elements */}
@@ -33,7 +33,7 @@ const Hero: React.FC<HeroProps> = ({ onStart }) => {
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
                     <button
-                        onClick={onStart}
+                        onClick={() => onSelectTab('upload')}
                         className="group relative px-8 py-4 rounded-xl bg-white text-black font-bold text-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2 overflow-hidden"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -42,12 +42,18 @@ const Hero: React.FC<HeroProps> = ({ onStart }) => {
                         <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
                     </button>
 
-                    <button className="px-8 py-4 rounded-xl glass hover:bg-white/10 text-white font-semibold text-lg transition-all flex items-center gap-2 border border-white/10">
+                    <button
+                        onClick={() => onSelectTab('camera')}
+                        className="px-8 py-4 rounded-xl glass hover:bg-white/10 text-white font-semibold text-lg transition-all flex items-center gap-2 border border-white/10"
+                    >
                         <Camera className="w-5 h-5" />
                         <span>Use Camera</span>
                     </button>
 
-                    <button className="px-8 py-4 rounded-xl glass hover:bg-white/10 text-white font-semibold text-lg transition-all flex items-center gap-2 border border-white/10">
+                    <button
+                        onClick={() => onSelectTab('dialogue')}
+                        className="px-8 py-4 rounded-xl glass hover:bg-white/10 text-white font-semibold text-lg transition-all flex items-center gap-2 border border-white/10"
+                    >
                         <MessageSquare className="w-5 h-5" />
                         <span>Dialogue</span>
                     </button>
