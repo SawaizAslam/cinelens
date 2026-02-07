@@ -1,13 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Upload, Camera, MessageSquare, Search } from 'lucide-react';
+import CameraCapture from './CameraCapture';
 
 interface InputCardProps {
-    onIdentify: () => void;
+    onIdentify: (imageSrc?: string) => void;
 }
 
 const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
     const [activeTab, setActiveTab] = useState<'upload' | 'camera' | 'dialogue'>('upload');
     const [isDragOver, setIsDragOver] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const handleCameraCapture = (imageSrc: string) => {
+        onIdentify(imageSrc);
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                onIdentify(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setIsDragOver(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                onIdentify(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <div className="w-full max-w-3xl mx-auto glass rounded-2xl p-1 relative z-20 -mt-10 mb-20">
@@ -18,8 +48,8 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                     <button
                         onClick={() => setActiveTab('upload')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'upload'
-                                ? 'text-primary border-b-2 border-primary'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'text-primary border-b-2 border-primary'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         <Upload className="w-4 h-4" />
@@ -29,8 +59,8 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                     <button
                         onClick={() => setActiveTab('camera')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'camera'
-                                ? 'text-secondary border-b-2 border-secondary'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'text-secondary border-b-2 border-secondary'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         <Camera className="w-4 h-4" />
@@ -40,8 +70,8 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                     <button
                         onClick={() => setActiveTab('dialogue')}
                         className={`flex items-center gap-2 pb-2 transition-all ${activeTab === 'dialogue'
-                                ? 'text-accent border-b-2 border-accent'
-                                : 'text-gray-400 hover:text-white'
+                            ? 'text-accent border-b-2 border-accent'
+                            : 'text-gray-400 hover:text-white'
                             }`}
                     >
                         <MessageSquare className="w-4 h-4" />
@@ -57,8 +87,16 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
             `}
                         onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
                         onDragLeave={() => setIsDragOver(false)}
-                        onDrop={(e) => { e.preventDefault(); setIsDragOver(false); }}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current?.click()}
                     >
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                        />
                         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                             <Upload className="w-8 h-8 text-gray-400 group-hover:text-primary transition-colors" />
                         </div>
@@ -71,14 +109,7 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                 )}
 
                 {activeTab === 'camera' && (
-                    <div className="aspect-video bg-black rounded-xl border border-white/10 flex items-center justify-center relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center pb-8 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <p className="text-white font-medium">Click to capture</p>
-                        </div>
-                        <button className="w-20 h-20 rounded-full border-4 border-white/20 flex items-center justify-center hover:bg-white/10 transition-all hover:scale-105">
-                            <div className="w-16 h-16 rounded-full bg-red-500"></div>
-                        </button>
-                    </div>
+                    <CameraCapture onCapture={handleCameraCapture} />
                 )}
 
                 {activeTab === 'dialogue' && (
@@ -89,7 +120,7 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify }) => {
                         ></textarea>
                         <div className="flex justify-end">
                             <button
-                                onClick={onIdentify}
+                                onClick={() => onIdentify()}
                                 className="px-8 py-3 rounded-xl bg-gradient-to-r from-accent to-blue-600 text-white font-bold hover:shadow-lg hover:shadow-accent/25 transition-all flex items-center gap-2"
                             >
                                 <Search className="w-5 h-5" />

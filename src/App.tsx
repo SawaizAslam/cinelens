@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 function App() {
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isModalScrolled, setIsModalScrolled] = useState(false);
 
   const handleIdentify = () => {
     setIsAnalyzing(true);
@@ -17,6 +18,8 @@ function App() {
     setTimeout(() => {
       setIsAnalyzing(false);
       setShowResult(true);
+      // Reset modal scroll state
+      setIsModalScrolled(false);
       // Smooth scroll to result
       document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 2000);
@@ -51,7 +54,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
-      <Navbar />
+      <Navbar forceScrolled={isModalScrolled} />
 
       <main className="relative z-10">
         <Hero onStart={() => document.getElementById('identify-section')?.scrollIntoView({ behavior: 'smooth' })} />
@@ -75,26 +78,32 @@ function App() {
         )}
 
         {showResult && (
-          <div id="result-section" className="bg-gradient-to-b from-transparent to-black/50 py-20 border-t border-white/5 mx-auto px-6">
-            <div className="container mx-auto">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="h-px bg-gradient-to-r from-transparent to-primary flex-1"></div>
-                <h2 className="text-2xl font-bold text-white">Analysis Result</h2>
-                <div className="h-px bg-gradient-to-l from-transparent to-primary flex-1"></div>
-              </div>
+          <div
+            className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm overflow-y-auto pt-20"
+            onScroll={(e) => setIsModalScrolled(e.currentTarget.scrollTop > 10)}
+          >
+            <div className="min-h-screen px-4 text-center">
 
-              <ResultCard />
+              {/* Overlay ghost element for centering */}
+              <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
 
-              <div className="max-w-5xl mx-auto mt-16">
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                  <span className="w-1 h-6 bg-secondary rounded-full"></span>
-                  You may also like
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                  {recommendations.map((movie, idx) => (
-                    <MovieCard key={idx} {...movie} />
-                  ))}
+              <div className="inline-block w-full max-w-6xl text-left align-middle transition-all transform animate-slide-up my-8 relative">
+
+                <ResultCard onClose={() => setShowResult(false)} />
+
+                {/* Recommendations Section inside Modal */}
+                <div className="mt-12 bg-black/50 p-8 rounded-2xl border border-white/10">
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                    <span className="w-1 h-6 bg-secondary rounded-full"></span>
+                    You may also like
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {recommendations.map((movie, idx) => (
+                      <MovieCard key={idx} {...movie} />
+                    ))}
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>

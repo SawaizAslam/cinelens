@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Film, Menu, X, Github } from 'lucide-react';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    forceScrolled?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ forceScrolled = false }) => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -13,9 +17,11 @@ const Navbar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const shouldBlur = isScrolled || forceScrolled;
+
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-black/50 backdrop-blur-md py-4' : 'bg-transparent py-6'
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${shouldBlur ? 'bg-black/50 backdrop-blur-md py-4' : 'bg-transparent py-6'
                 }`}
         >
             <div className="container mx-auto px-6 flex items-center justify-between">

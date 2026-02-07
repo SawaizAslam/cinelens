@@ -1,10 +1,21 @@
 import React from 'react';
-import { Star, Play, ExternalLink, RefreshCw } from 'lucide-react';
+import { Star, Play, ExternalLink, RefreshCw, X } from 'lucide-react';
 
-const ResultCard: React.FC = () => {
+interface ResultCardProps {
+    onClose: () => void;
+}
+
+const ResultCard: React.FC<ResultCardProps> = ({ onClose }) => {
     return (
-        <div className="w-full max-w-5xl mx-auto mb-20 animate-fade-in">
-            <div className="glass rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/20 md:flex">
+        <div className="w-full max-w-5xl mx-auto animate-fade-in relative z-50">
+            <div className="glass rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/20 md:flex relative">
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-[60] text-white/50 hover:text-white bg-black/50 rounded-full p-2 backdrop-blur-md transition-colors"
+                >
+                    <X className="w-6 h-6" />
+                </button>
+
                 {/* Poster Image */}
                 <div className="md:w-1/3 relative group cursor-pointer overflow-hidden">
                     <img
@@ -21,14 +32,14 @@ const ResultCard: React.FC = () => {
 
                 {/* Content */}
                 <div className="md:w-2/3 p-8 md:p-10 relative bg-black/80 backdrop-blur-xl">
-                    <div className="absolute top-0 right-0 p-6">
-                        <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            <span className="text-green-500 text-sm font-semibold">98% Match</span>
-                        </div>
-                    </div>
-
                     <div className="mb-6">
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full">
+                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <span className="text-green-500 text-sm font-semibold">98% Match</span>
+                            </div>
+                        </div>
+
                         <h2 className="text-4xl font-bold text-white mb-2">The Dark Knight</h2>
                         <div className="flex items-center gap-4 text-gray-400 text-sm">
                             <span className="border border-gray-700 px-2 py-0.5 rounded text-xs">MOVIE</span>
@@ -61,15 +72,28 @@ const ResultCard: React.FC = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-4 pt-4">
-                            <button className="px-6 py-3 rounded-lg bg-primary hover:bg-indigo-600 text-white font-semibold transition-colors flex items-center gap-2">
+                            <a
+                                href="https://www.youtube.com/results?search_query=The+Dark+Knight+trailer"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-6 py-3 rounded-lg bg-primary hover:bg-indigo-600 text-white font-semibold transition-colors flex items-center gap-2"
+                            >
                                 <Play className="w-4 h-4 fill-current" />
                                 Watch Trailer
-                            </button>
-                            <button className="px-6 py-3 rounded-lg border border-white/10 hover:bg-white/5 text-white font-medium transition-colors flex items-center gap-2">
+                            </a>
+                            <a
+                                href="https://www.imdb.com/find?q=The+Dark+Knight"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-6 py-3 rounded-lg border border-white/10 hover:bg-white/5 text-white font-medium transition-colors flex items-center gap-2"
+                            >
                                 <ExternalLink className="w-4 h-4" />
                                 View IMDb
-                            </button>
-                            <button className="px-6 py-3 rounded-lg border border-white/10 hover:bg-white/5 text-gray-400 hover:text-white font-medium transition-colors flex items-center gap-2">
+                            </a>
+                            <button
+                                onClick={onClose}
+                                className="px-6 py-3 rounded-lg border border-white/10 hover:bg-white/5 text-gray-400 hover:text-white font-medium transition-colors flex items-center gap-2"
+                            >
                                 <RefreshCw className="w-4 h-4" />
                                 Try Another
                             </button>
