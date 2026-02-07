@@ -11,6 +11,7 @@ interface InputCardProps {
 const InputCard: React.FC<InputCardProps> = ({ onIdentify, activeTab, onTabChange }) => {
     // Local state removed in favor of props
     const [isDragOver, setIsDragOver] = useState(false);
+    const [dialogueText, setDialogueText] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleCameraCapture = (imageSrc: string) => {
@@ -117,13 +118,16 @@ const InputCard: React.FC<InputCardProps> = ({ onIdentify, activeTab, onTabChang
                 {activeTab === 'dialogue' && (
                     <div className="space-y-4">
                         <textarea
+                            value={dialogueText}
+                            onChange={(e) => setDialogueText(e.target.value)}
                             className="w-full h-40 bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/50 transition-all resize-none text-lg"
                             placeholder='Type a famous dialogue... e.g. "Why so serious?"'
                         ></textarea>
                         <div className="flex justify-end">
                             <button
-                                onClick={() => onIdentify()}
-                                className="px-8 py-3 rounded-xl bg-gradient-to-r from-accent to-blue-600 text-white font-bold hover:shadow-lg hover:shadow-accent/25 transition-all flex items-center gap-2"
+                                onClick={() => onIdentify(dialogueText)}
+                                disabled={!dialogueText.trim()}
+                                className="px-8 py-3 rounded-xl bg-gradient-to-r from-accent to-blue-600 text-white font-bold hover:shadow-lg hover:shadow-accent/25 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Search className="w-5 h-5" />
                                 <span>Identify Now</span>

@@ -6,29 +6,51 @@ import ResultCard from './components/ResultCard';
 import MovieCard from './components/MovieCard';
 import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
+import { identifyImage, identifyDialogue } from './services/gemini';
+import type { MovieResult } from './services/gemini';
 
 function App() {
   const [showResult, setShowResult] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isModalScrolled, setIsModalScrolled] = useState(false);
   const [activeInputTab, setActiveInputTab] = useState<'upload' | 'camera' | 'dialogue'>('upload');
+  const [resultData, setResultData] = useState<MovieResult | null>(null);
 
   const handleTabSelect = (tab: 'upload' | 'camera' | 'dialogue') => {
     setActiveInputTab(tab);
     document.getElementById('identify-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleIdentify = () => {
+  const handleIdentify = async (input?: string) => {
+    if (!input) return;
+
     setIsAnalyzing(true);
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      let result: MovieResult | null = null;
+
+      // Check if input is an image (data URL) or text prompt
+      if (input.startsWith('data:image')) {
+        result = await identifyImage(input);
+      } else {
+        // Assume it's a dialogue text
+        result = await identifyDialogue(input);
+      }
+
+      if (result) {
+        setResultData(result);
+        setShowResult(true);
+        setIsModalScrolled(false);
+        // Smooth scroll to result handled by modal popup
+      } else {
+        alert("Could not identify the content. The AI detection returned no result.");
+      }
+    } catch (error: any) {
+      console.error("Identification Failed:", error);
+      alert(`Error: ${error.message || "Something went wrong"}`);
+    } finally {
       setIsAnalyzing(false);
-      setShowResult(true);
-      // Reset modal scroll state
-      setIsModalScrolled(false);
-      // Smooth scroll to result
-      document.getElementById('result-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 2000);
+    }
   };
 
   const recommendations = [
@@ -87,7 +109,7 @@ function App() {
           </div>
         )}
 
-        {showResult && (
+        {showResult && resultData && (
           <div
             className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm overflow-y-auto pt-20"
             onScroll={(e) => setIsModalScrolled(e.currentTarget.scrollTop > 10)}
@@ -99,7 +121,7 @@ function App() {
 
               <div className="inline-block w-full max-w-6xl text-left align-middle transition-all transform animate-slide-up my-8 relative">
 
-                <ResultCard onClose={() => setShowResult(false)} />
+                <ResultCard onClose={() => setShowResult(false)} data={resultData} />
 
                 {/* Recommendations Section inside Modal */}
                 <div className="mt-12 bg-black/50 p-8 rounded-2xl border border-white/10">
