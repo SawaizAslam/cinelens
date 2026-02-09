@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# Cazem – The Shazam for Movies
+![Platform](https://img.shields.io/badge/Platform-Web-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Status](https://img.shields.io/badge/Status-Beta-orange)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Cazem** is an intelligent, multimodal movie identification platform. Think of it as Shazam, but for movies. Instead of audio, Cazem uses the power of **Google Gemini 3.0** to analyze visual scenes, dialogue snippets, and screenshots to instantly identify films with high accuracy.
 
-Currently, two official plugins are available:
+It doesn't just give you a title; Cazem acts as a cinematic detective, providing context, cast details, ratings, and where to stream, all wrapped in a premium, responsive interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-   **📸 Visual Recognition**: Snap a photo or upload a screenshot of any movie scene. Cazem analyzes actors, setting, lighting, and costumes to identify the film.
+-   **💬 Dialogue Matching**: Type in a quote (even if you misremember it!), and Cazem will find the movie it belongs to.
+-   **🤖 Powered by Gemini 3.0**: Leveraging the latest multimodal AI for superior reasoning and context awareness.
+-   **🎬 Rich Metadata**: Instant access to posters, backdrops, cast, directors, release years, and ratings via TMDB integration.
+-   **✨ Smart Recommendations**: Discover similar movies based on the "vibe" and visual style of your identified film.
+-   **📱 Responsive Design**: A "Cinematic" dark-mode UI built with Tailwind v4 that looks great on desktop and mobile.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+-   **Frontend**: React 19, Vite
+-   **Styling**: Tailwind CSS v4, Lucide React (Icons)
+-   **AI Engine**: Google Gemini API (`gemini-2.5-pro` & `gemini-1.5-flash` variants)
+-   **Data Provider**: TMDB (The Movie Database) API
+-   **Deployment**: Vercel (recommended)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🏁 Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Prerequisites
+-   Node.js (v18 or higher)
+-   npm or yarn
+-   A **Google Gemini API Key**
+-   A **TMDB API Key**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/cazem.git
+    cd cazem
+    ```
+
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Set up Environment Variables**
+    Create a `.env` file in the root directory and add your API keys:
+    ```env
+    VITE_GEMINI_API_KEY=your_gemini_api_key_here
+    VITE_TMDB_API_KEY=your_tmdb_api_key_here
+    VITE_TMDB_BASE_URL=https://api.themoviedb.org/3
+    ```
+
+4.  **Run the Development Server**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 💡 How It Works
+
+1.  **Select Input Mode**: Choose between "Upload Scene", "Use Camera", or "Dialogue".
+2.  **Submit Query**: 
+    -   *Upload/Camera*: The image is sent to Gemini 3.0 for visual analysis.
+    -   *Dialogue*: The text is analyzed for semantic matches in movie scripts.
+3.  **Verification**: The AI's identification is cross-referenced with TMDB to ensure the movie exists and to fetch high-quality metadata.
+4.  **Results**: View the identified movie, its details, and get curated recommendations.
+
+---
+
+## 🚧 Challenges & Roadmap
+
+### Challenges We Faced
+-   **API Rate Limits**: One critical challenge was the scene upload feature. Initial implementations hit API rate limits almost instantly due to high-resolution image uploads. We implemented optimization strategies and better error handling to manage quotas effectively.
+-   **Hallucinations**: Early AI models would guess generic scenes incorrectly. We refined our system prompts to force the AI to look for specific identifying details (props, background actors) before making a guess.
+
+### What's Next
+-   [ ] **Optimizing Scene Upload Pipeline**: Refactoring the upload process to be 100% reliable and edge-case resistant against API limits.
+-   [ ] **Watchlist**: Save identified movies to a personal list.
+-   [ ] **Social Challenges**: "Guess the Scene" daily games generated by AI.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
