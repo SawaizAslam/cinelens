@@ -18,6 +18,10 @@ export interface MovieResult {
 
 // 2. The Main Function
 export const identifyImage = async (base64Image: string): Promise<MovieResult | null> => {
+    if (!API_KEY) {
+        throw new Error("API Key is missing. Please check .env file.");
+    }
+
     try {
         // 3. Select the Model
         // Using Gemini 3 Pro Image Preview - optimized for image/vision tasks
@@ -65,11 +69,17 @@ export const identifyImage = async (base64Image: string): Promise<MovieResult | 
 
         // Remove any accidental markdown code blocks
         const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        return JSON.parse(cleanJson);
 
-    } catch (error) {
+        try {
+            return JSON.parse(cleanJson);
+        } catch (e) {
+            console.error("JSON Parse Error:", e);
+            throw new Error(`Failed to parse AI response: ${text.substring(0, 50)}...`);
+        }
+
+    } catch (error: any) {
         console.error("Error identifying image:", error);
-        return null;
+        throw new Error(error.message || "Unknown AI Error");
     }
 };
 

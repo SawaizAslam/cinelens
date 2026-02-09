@@ -5,9 +5,10 @@ import type { MovieResult } from '../services/gemini';
 interface ResultCardProps {
     onClose: () => void;
     data: MovieResult | null;
+    tmdbData?: any;
 }
 
-const ResultCard: React.FC<ResultCardProps> = ({ onClose, data }) => {
+const ResultCard: React.FC<ResultCardProps> = ({ onClose, data, tmdbData }) => {
     if (!data) return null;
 
     return (
@@ -20,19 +21,21 @@ const ResultCard: React.FC<ResultCardProps> = ({ onClose, data }) => {
                     <X className="w-6 h-6" />
                 </button>
 
-                {/* Poster Image (Placeholder for now until TMDB Phase) */}
+                {/* Poster Image */}
                 <div className="md:w-1/3 relative group cursor-pointer overflow-hidden bg-black/50 flex items-center justify-center">
                     <img
-                        src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+                        src={tmdbData?.poster || "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"}
                         alt={data.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50 grayscale hover:grayscale-0"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                        <span className="text-gray-400 text-sm mb-2">Poster coming in next phase</span>
-                        <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center">
-                            <Play className="w-8 h-8 text-white ml-1" />
+                    {!tmdbData?.poster && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 bg-black/50">
+                            <span className="text-gray-400 text-sm mb-2">Poster unavailable</span>
+                            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center">
+                                <Play className="w-8 h-8 text-white ml-1" />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Content */}

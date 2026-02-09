@@ -8,9 +8,9 @@ const HowItWorks: React.FC = () => {
 
             <div className="container mx-auto px-6">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How CineLens Works</h2>
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How Cazem Works</h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
-                        Our advanced AI analyzes visual patterns and audible context to identify entertainment content with human-level accuracy.
+                        Powered by Google's Gemini 3 API, we analyze visual scenes and dialogue to identify movies with cutting-edge AI technology.
                     </p>
                 </div>
 
@@ -24,8 +24,8 @@ const HowItWorks: React.FC = () => {
                         },
                         {
                             icon: <Cpu className="w-8 h-8 text-secondary" />,
-                            title: "Gemini Analysis",
-                            desc: "Our AI processes visual data and context to find matches in milliseconds.",
+                            title: "Gemini 3 Analysis",
+                            desc: "Google's Gemini 3 API processes your input using advanced vision and language models to identify the movie.",
                             step: "02"
                         },
                         {

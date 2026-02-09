@@ -8,6 +8,7 @@ import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import { identifyImage, identifyDialogue } from './services/gemini';
 import type { MovieResult } from './services/gemini';
+import { enrichMovieData } from './services/tmdb';
 
 function App() {
   const [showResult, setShowResult] = useState(false);
@@ -15,6 +16,8 @@ function App() {
   const [isModalScrolled, setIsModalScrolled] = useState(false);
   const [activeInputTab, setActiveInputTab] = useState<'upload' | 'camera' | 'dialogue'>('upload');
   const [resultData, setResultData] = useState<MovieResult | null>(null);
+  const [tmdbData, setTmdbData] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
 
   const handleTabSelect = (tab: 'upload' | 'camera' | 'dialogue') => {
     setActiveInputTab(tab);
@@ -39,9 +42,16 @@ function App() {
 
       if (result) {
         setResultData(result);
+
+        // Enrich with TMDB data
+        const tmdb = await enrichMovieData(result.title);
+        if (tmdb) {
+          setTmdbData(tmdb);
+          setRecommendations(tmdb.similarMovies || []);
+        }
+
         setShowResult(true);
         setIsModalScrolled(false);
-        // Smooth scroll to result handled by modal popup
       } else {
         alert("Could not identify the content. The AI detection returned no result.");
       }
@@ -53,32 +63,6 @@ function App() {
     }
   };
 
-  const recommendations = [
-    {
-      title: "Inception",
-      image: "https://image.tmdb.org/t/p/w500/9gk7admal4zlWH9AJ46r4tpUUyU.jpg",
-      rating: 8.8,
-      year: 2010
-    },
-    {
-      title: "Interstellar",
-      image: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-      rating: 8.6,
-      year: 2014
-    },
-    {
-      title: "The Prestige",
-      image: "https://image.tmdb.org/t/p/w500/tRNlZbgNCNOpLpbPEz5L8G8A0JN.jpg",
-      rating: 8.5,
-      year: 2006
-    },
-    {
-      title: "Tenet",
-      image: "https://image.tmdb.org/t/p/w500/k68nPLbISTUMPC96vRdyE8TRp71.jpg",
-      rating: 7.3,
-      year: 2020
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-background text-white selection:bg-primary/30 selection:text-white">
@@ -121,20 +105,22 @@ function App() {
 
               <div className="inline-block w-full max-w-6xl text-left align-middle transition-all transform animate-slide-up my-8 relative">
 
-                <ResultCard onClose={() => setShowResult(false)} data={resultData} />
+                <ResultCard onClose={() => setShowResult(false)} data={resultData} tmdbData={tmdbData} />
 
                 {/* Recommendations Section inside Modal */}
-                <div className="mt-12 bg-black/50 p-8 rounded-2xl border border-white/10">
-                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                    <span className="w-1 h-6 bg-secondary rounded-full"></span>
-                    You may also like
-                  </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {recommendations.map((movie, idx) => (
-                      <MovieCard key={idx} {...movie} />
-                    ))}
+                {recommendations.length > 0 && (
+                  <div className="mt-12 bg-black/50 p-8 rounded-2xl border border-white/10">
+                    <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                      <span className="w-1 h-6 bg-secondary rounded-full"></span>
+                      You may also like
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      {recommendations.map((movie, idx) => (
+                        <MovieCard key={idx} {...movie} />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
               </div>
             </div>

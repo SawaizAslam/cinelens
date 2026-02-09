@@ -17,18 +17,17 @@ const Hero: React.FC<HeroProps> = ({ onSelectTab }) => {
             <div className="container mx-auto px-6 relative z-10 text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 animate-fade-in shadow-lg shadow-primary/5">
                     <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span className="text-sm font-medium text-gray-300">Powered by Gemini AI 2.0</span>
+                    <span className="text-sm font-medium text-gray-300">Powered by Gemini AI 3.0</span>
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-tight animate-slide-up">
-                    Identify Any Movie Scene <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent">
-                        Instantly
+                        Cazem It!
                     </span>
                 </h1>
 
                 <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                    Upload a scene, screenshot, or dialogue. Let our advanced AI reveal exactly what you’re watching in seconds.
+                    Like Shazam, but for movies! Upload a scene, snap a screenshot, or type a dialogue. Our AI reveals what you're watching in seconds.
                 </p>
 
                 <div className="flex flex-col md:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
@@ -38,7 +37,7 @@ const Hero: React.FC<HeroProps> = ({ onSelectTab }) => {
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <ImageIcon className="w-5 h-5 relative z-10" />
-                        <span className="relative z-10">Upload Scene</span>
+                        <span className="relative z-10">Cazem a Scene</span>
                         <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
                     </button>
 

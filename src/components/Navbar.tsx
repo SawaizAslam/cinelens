@@ -33,15 +33,15 @@ const Navbar: React.FC<NavbarProps> = ({ forceScrolled = false }) => {
                         </div>
                     </div>
                     <span className="text-2xl font-bold tracking-tighter text-white">
-                        Cine<span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Lens</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Cazem</span>
                     </span>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-8">
-                    <a href="#" className="text-gray-300 hover:text-white transition-colors">Home</a>
-                    <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors">How it works</a>
-                    <a href="#" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+                    <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="#how-it-works" onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-gray-300 hover:text-white transition-colors">How it works</a>
+                    <a href="https://github.com/SawaizAslam/cazem" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
                         <Github className="w-4 h-4" />
                         <span>GitHub</span>
                     </a>
@@ -62,9 +62,9 @@ const Navbar: React.FC<NavbarProps> = ({ forceScrolled = false }) => {
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
                 <div className="absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-t border-white/10 p-6 md:hidden flex flex-col gap-4">
-                    <a href="#" className="text-lg text-white">Home</a>
-                    <a href="#how-it-works" className="text-lg text-gray-300">How it works</a>
-                    <a href="#" className="text-lg text-gray-300">GitHub</a>
+                    <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-lg text-white">Home</a>
+                    <a href="#how-it-works" onClick={(e) => { e.preventDefault(); document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }); setIsMobileMenuOpen(false); }} className="text-lg text-gray-300">How it works</a>
+                    <a href="https://github.com/SawaizAslam/cazem" target="_blank" rel="noopener noreferrer" className="text-lg text-gray-300">GitHub</a>
                     <button className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold">
                         Try Demo
                     </button>
